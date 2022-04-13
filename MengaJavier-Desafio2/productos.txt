@@ -1,0 +1,1 @@
+[{"title":"lápiz","price":100,"thumbnail":"../multimedia/lapiz.jpg","id":1},{"title":"cartuchera","price":200,"thumbnail":"../multimedia/cartuchera.jpg","id":2},{"title":"riñonera","price":300,"thumbnail":"../multimedia/rinonera.jpg","id":3}]
