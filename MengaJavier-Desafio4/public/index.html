@@ -11,13 +11,12 @@
 <body>
     <h1>Formulario de ingreso de Productos</h1>
     <h3>Ingrese la información del producto según corresponda</h3>
-    <form action="">
-        <label for="title">Título</label>
-        <input type="text" placeholder="Ej: Camisa" name="title">
-        <label for="price">Precio</label>
-        <input type="number" min="0" placeholder="Ej: 2500" name="price">
-        <label for="image">Imagen</label>
-        <input type="image" name="image">
+    <!-- enctype="multipart/form-data" faltaría? -->
+    <form action="/api/productos" method="post">
+        <input type="text" name="title">
+        <input type="number" name="price">
+        <label for="thumbnail">Imagen</label>
+        <input type="file" name="thumbnail">
         <input type="submit" value="Guardar">
     </form>
 </body>

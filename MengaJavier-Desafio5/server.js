@@ -9,7 +9,7 @@ const router = Router()
 const bodyParser = require('body-parser')
 const jsonParser = bodyParser.json()
 const multer = require('multer')
-const { Console } = require('console')
+const handlebars = require('express-handlebars')
 
 // Declaro el storage
 let storage = multer.diskStorage({
@@ -32,6 +32,15 @@ app.use('/api/productos', router)
 
 // Codigo para que levante el html
 app.use('static', express.static(__dirname + 'public'))
+
+app.engine('hbs', handlebars.engine({
+    extname: 'hbs',
+    defaultLayout: 'form.hbs',
+    layoutsDir: __dirname + '/views/layouts',
+    partialsDir: __dirname + '/views/partials/'
+}))
+app.set('views', './views')
+app.set('view engine', 'hbs')
 
 
 // Server
@@ -117,8 +126,6 @@ class Container {
 // Defino mi clase "Product" con los metodos de la clase "Container"
 let Products = new Container('productos.txt');
 
-
-
 // Rutas
 // ruta para obtener todos los productos
 router.get('/', (req, res) => {
@@ -126,49 +133,15 @@ router.get('/', (req, res) => {
     res.json(allProducts);
 })
 
-// ruta para obtener un producto según id
-router.get('/:id', (req, res) => {
-    let id = parseInt(req.params.id);
-    let foundProduct = Products.getById(id)
-    if (foundProduct === undefined) {
-        res.send({ error: 'Producto no encontrado' })
-    } else {
-        res.json(foundProduct)
-    }
-})
-
 // ruta para agregar un producto según la información que se envía
-// NO ME FUNCIONA QUE SE GUARDEN LOS ARCHIVOS EN LA CARPETA UPLOADS
-router.post('/', jsonParser, upload.single('thumbnail'), (req, res, next) => {
+router.post('/', jsonParser, (req, res, next) => {
     let newProduct = req.body;
+    newProduct.price = parseInt(newProduct.price);
     Products.save(newProduct);
     res.json(newProduct);
 })
 
-// ruta para modificar un producto según id y la información que se envía
-router.put('/:id', jsonParser, (req, res) => {
-    let id = parseInt(req.params.id);
-    let productModified = req.body;
-    let foundProduct = Products.getById(id);
-    if (foundProduct === undefined) {
-        res.send({ error: 'Producto no encontrado' })
-    } else {
-        (foundProduct).title = productModified.title;
-        (foundProduct).price = productModified.price;
-        (foundProduct).thumbnail = productModified.thumbnail;
-        Products.modifyById(id, foundProduct);
-        res.json(foundProduct);
-    }
-})
-
-// ruta para borrar un producto según id
-router.delete('/:id', (req, res) => {
-    let id = parseInt(req.params.id);
-    Products.deleteById(id);
-    res.send('Producto eliminado')
-})
-
 // Ruta para levantar HTML
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html')
+app.get('/productos', (req, res) => {
+    res.render('main.hbs')
 })
