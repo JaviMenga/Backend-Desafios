@@ -1,53 +1,40 @@
 // FS
-const fs = require('fs')
+const fs = require('fs');
 
-// Express
-const express = require('express')
-const app = express()
-const { Router } = express
-const router = Router()
-const bodyParser = require('body-parser')
+// EXPRESS
+const express = require('express');
+const PORT = 8080;
+const app = express();
+
+// CODIGO PARA ACCEDER A LOS DATOS DEL BODY RECIBIDOS POR PARTE DEL CLIENTE
+const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json()
-const multer = require('multer')
-const handlebars = require('express-handlebars')
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// Declaro el storage
-let storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, '/uploads')
-    },
-    filename: function(req, file, cb) {
-        cb(null, file.originalname + '-' + Date.now())
-    }
-})
-let upload = multer({ storage: storage })
-
-// Codigo para que interprete mejor los json que envía el cliente?
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-let urlencodedParser = bodyParser.urlencoded({ extended: false })
-
-// Codigo para que la app use los router
-app.use('/api/productos', router)
-
-// Codigo para que levante el html
-app.use('static', express.static(__dirname + 'public'))
-
+// ESTABLEZCO LA CONFIGURACION DE HANDLEBARS
+const handlebars = require('express-handlebars');
 app.engine('hbs', handlebars.engine({
-    extname: 'hbs',
-    defaultLayout: 'form.hbs',
+    extname: '.hbs',
+    defaultLayout: 'index.hbs',
     layoutsDir: __dirname + '/views/layouts',
-    partialsDir: __dirname + '/views/partials/'
-}))
-app.set('views', './views')
-app.set('view engine', 'hbs')
+    partialsDir: __dirname + '/views/partials'
+}));
 
+// ESTABLEZCO EL MOTOR DE PLANTILLA QUE UTILIZARE
+app.set('view engine', 'hbs');
 
-// Server
-const server = app.listen(8080, () => { console.log('Server is running on port 8080') })
-server.on('error', (err) => { console.log(err) })
+// ESTABLEZCO EL DIRECTORIO DONDE SE ENCUENTRAN LOS ARCHIVOS DE LAS PLANTILLAS
+app.set('views', './views');
 
-// Defino mi clase "Container" de Productos con sus respectivos metodos
+// ESCUCHO EL SERVIDOR
+const server = app.listen(PORT, () => {
+    console.log(`Servidor escuchando en el puerto ${PORT}`);
+});
+// MANEJO DE ERRORES
+server.on('error', err => { console.log(err) });
+
+// TENGO MI CLASE DE PRODUCTS CON SUS RESPECTIVOS METODOS
 class Container {
     constructor(fileName) {
         this.fileName = fileName;
@@ -123,25 +110,22 @@ class Container {
 
     }
 }
-// Defino mi clase "Product" con los metodos de la clase "Container"
+
+// DEFINO MI CLASE 'Products' CON LOS METODOS DE LA CLASE 'Container'
 let Products = new Container('productos.txt');
 
-// Rutas
-// ruta para obtener todos los productos
-router.get('/', (req, res) => {
-    let allProducts = Products.getAll();
-    res.json(allProducts);
-})
+// RUTAS
+app.get('/products', (req, res) => {
+    res.render('form');
+});
 
-// ruta para agregar un producto según la información que se envía
-router.post('/', jsonParser, (req, res, next) => {
-    let newProduct = req.body;
-    newProduct.price = parseInt(newProduct.price);
+app.post('/products', (req, res) => {
+    let newProduct = req.body
+    newProduct.price = parseInt(newProduct.price)
     Products.save(newProduct);
-    res.json(newProduct);
-})
+    res.render('form')
+});
 
-// Ruta para levantar HTML
-app.get('/productos', (req, res) => {
-    res.render('main.hbs')
-})
+app.get('/allProducts', (req, res) => {
+    res.render('products', { products: Products.getAll() });
+});
