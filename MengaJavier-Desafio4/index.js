@@ -111,7 +111,6 @@ class Container {
         data[number - 1] = object;
         let json2 = JSON.stringify(data);
         fs.writeFileSync(this.fileName, json2);
-
     }
 }
 // Defino mi clase "Product" con los metodos de la clase "Container"
