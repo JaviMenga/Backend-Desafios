@@ -214,19 +214,6 @@ io.on('connection', async socket => {
 
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.post('/products', async(req, res) => {
     let newProduct = req.body
     newProduct.price = parseInt(newProduct.price)
