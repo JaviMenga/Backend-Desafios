@@ -1,12 +1,11 @@
 // Importo el modulo de la Clase ProductsDaoFirestore
-const { ProductsDaoFirestore } = require('../../daos/products/firestore/productsDaoFirestore');
+const { ProductsDaoFirestore } = require('../../daos/products/productsDaoFirestore');
 
 const express = require('express');
 const { Router } = express;
 const productsRouter = Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
-
 
 let productsDaoFirestore = new ProductsDaoFirestore();
 let administrator = true;
@@ -27,8 +26,10 @@ productsRouter.get('/:id?', async(req, res) => {
     };
 });
 
+// ----------------ESTOY TENIENDO PROBLEMAS CON EL REQ.BODY
 productsRouter.post('/', jsonParser, async(req, res) => {
     if (administrator) {
+        console.log(req.body);
         await productsDaoFirestore.save(req.body);
         let allProducts = await productsDaoFirestore.getAll();
         res.json(allProducts)
@@ -37,6 +38,7 @@ productsRouter.post('/', jsonParser, async(req, res) => {
     }
 });
 
+// ----------------ESTOY TENIENDO PROBLEMAS CON EL REQ.BODY
 productsRouter.put('/:id', jsonParser, async(req, res) => {
     if (administrator && req.body.name && req.body.price && req.body.description && req.body.url && req.body.code && req.body.stock) {
         let id = req.params.id;

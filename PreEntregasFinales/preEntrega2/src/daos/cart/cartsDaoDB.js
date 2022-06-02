@@ -1,5 +1,5 @@
-const { ContainerDB } = require('../../../containers/mongodb/containerDB.js');
-const { CartsModel } = require('../../../models/carts.js');
+const { ContainerDB } = require('../../containers/containerDB.js');
+const { CartsModel } = require('../../models/carts.js');
 
 class CartsDaoDB extends ContainerDB {
     constructor() {

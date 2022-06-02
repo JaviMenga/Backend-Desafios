@@ -1,27 +1,25 @@
 let admin = require("firebase-admin");
 
-let serviceAccount = require("../../data/firestoreKey/backenddb-7b7a5-firebase-adminsdk-v1epw-ef72224d34.json");
+let serviceAccount = require("../data/firestoreKey/backenddb-7b7a5-firebase-adminsdk-v1epw-ef72224d34.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });
 
+let db = admin.firestore();
+
 console.log("firestore initialized");
 
 class ContainerFirestore {
     constructor(collection) {
-        this.db = admin.firestore().collection(collection);
+        this.collection = db.collection(collection);
     };
 
-    async saveInDb(content) {
+    async saveInDb(content, id) {
         try {
-            let products = await this.getContentDB();
-            let id = (products.length + 1).toString();
-            let doc = this.db.doc(id);
-            await doc.create(content)
-            console.log('Productos guardados en la base de datos');
-            id++
-
+            let doc = this.collection.doc(id);
+            let item = await doc.create(content);
+            return item;
         } catch (err) {
             throw err
         }
@@ -29,13 +27,8 @@ class ContainerFirestore {
 
     async getContentDB() {
         try {
-            let contentDB = await this.db.get();
-            let docs = contentDB.docs;
-
-            const resp = docs.map((doc) => {
-                return doc.data();
-            });
-            return resp
+            let contentDB = await this.collection.get();
+            return contentDB;
 
         } catch (err) {
             throw err
@@ -44,9 +37,8 @@ class ContainerFirestore {
 
     async deleteContentDb(id) {
         try {
-            let doc = this.db.doc(id);
+            let doc = this.collection.doc(id);
             await doc.delete();
-            console.log('Producto eliminado de la base de datos');
         } catch (err) {
             throw err
         }
@@ -54,7 +46,7 @@ class ContainerFirestore {
 
     async findContentDb(id) {
         try {
-            let doc = this.db.doc(id)
+            let doc = this.collection.doc(id)
             let contentDB = await doc.get();
             let data = contentDB.data();
             return data
@@ -65,7 +57,7 @@ class ContainerFirestore {
 
     async updateContentDb(id, update) {
         try {
-            let doc = this.db.doc(id);
+            let doc = this.collection.doc(id);
             await doc.update(update);
             console.log('Producto actualizado en la base de datos');
             return (await doc.get()).data();

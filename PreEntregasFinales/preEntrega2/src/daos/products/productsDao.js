@@ -1,4 +1,4 @@
-const { Container } = require('../../../containers/file/container.js');
+const { Container } = require('../../containers/container.js');
 
 class ProductsDao extends Container {
     constructor() {

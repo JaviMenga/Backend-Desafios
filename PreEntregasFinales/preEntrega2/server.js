@@ -6,12 +6,12 @@ const PORT = 8080;
 const app = express();
 
 // Importo los modulos necesarios
-const productsRouter = require('./src/routes/firestore/productsRoutesFirestore');
-const cartsRouter = require('./src/routes/firestore/cartsRoutesFirestore');
+// const productsRouter = require('./src/routes/firestore/productsRoutesFirestore');
+// const cartsRouter = require('./src/routes/firestore/cartsRoutesFirestore');
 // const productsRouter = require('./src/routes/mongodb/productsRoutesDB');
-// const productsRouter = require('./src/routes/file/productsRoutes');
-// const cartsRouter = require('./src/routes/file/cartsRoutes');
 // const cartsRouter = require('./src/routes/mongodb/cartsRoutesDB');
+const productsRouter = require('./src/routes/file/productsRoutes');
+const cartsRouter = require('./src/routes/file/cartsRoutes');
 
 app.use('/api/products', productsRouter);
 app.use('/api/cart', cartsRouter);

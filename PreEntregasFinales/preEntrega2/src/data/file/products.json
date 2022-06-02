@@ -1,10 +1,1 @@
-[{
-    "name": "Bermuda Blanca",
-    "description": "Bermuda Blanca de Vestir Cargo",
-    "code": "BB01",
-    "url": "www.google.com.ar/bermudaBlanca",
-    "price": 1500,
-    "stock": 5,
-    "id": 1,
-    "timestamp": 1652250458438
-}, { "name": "Bermuda Negra", "description": "Bermuda Negra de Vestir Cargo", "code": "BN01", "url": "www.google.com.ar/bermudaNegra", "price": 1500, "stock": 5, "id": 2, "timestamp": 1653497620417 }, { "name": "Bermuda Gris", "description": "Bermuda Gris de Vestir Cargo", "code": "BG01", "url": "www.google.com.ar/bermudaGris", "price": 1500, "stock": 5, "id": 3, "timestamp": 1653760924410 }]
+[{"name":"Bermuda Blanca","description":"Bermuda Blanca de Vestir Cargo","code":"BB01","url":"www.google.com.ar/bermudaBlanca","price":1500,"stock":5,"id":1,"timestamp":1652250458438},{"name":"Bermuda Gris","description":"Bermuda Gris de Vestir Cargo","code":"BG01","url":"www.google.com.ar/bermudaGris","price":1500,"stock":5,"id":3,"timestamp":1653760924410},{"id":4,"timestamp":1654189533596}]

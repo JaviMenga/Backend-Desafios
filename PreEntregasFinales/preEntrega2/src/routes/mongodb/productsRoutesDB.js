@@ -1,5 +1,5 @@
 // Importo el modulo de la Clase ProductsDaoDB
-const { ProductsDaoDB } = require('../../daos/products/mongodb/productsDaoDB.js');
+const { ProductsDaoDB } = require('../../daos/products/productsDaoDB.js');
 
 const express = require('express');
 const { Router } = express;
@@ -27,6 +27,7 @@ productsRouter.get('/:id?', async(req, res) => {
     };
 });
 
+// ----------------ESTOY TENIENDO PROBLEMAS CON EL REQ.BODY
 productsRouter.post('/', jsonParser, async(req, res) => {
     if (administrator) {
         await productsDaoDB.save(req.body);
@@ -37,11 +38,12 @@ productsRouter.post('/', jsonParser, async(req, res) => {
     }
 });
 
+// necesito ver como se que actualización están pasando por Body
 // productsRouter.put('/:id', jsonParser, async(req, res) => {
 //     if (administrator) {
 //         let id = parseInt(req.params.id);
 
-//         // necesito ver como se que actualización están pasando por Body
+//         
 //         productsDaoDB.updateById(id, productModified);
 //         res.json(productModified);
 //     } else {

@@ -23,8 +23,6 @@ class ContainerDB {
     async saveInDb(content) {
         try {
             await new this.model(content).save();
-            console.log('Productos guardados en la base de datos');
-
         } catch (err) {
             throw err
         }
@@ -43,7 +41,6 @@ class ContainerDB {
         try {
             if (filter) {
                 await this.model.deleteOne(filter);
-                console.log('Producto eliminado de la base de datos');
             } else {
                 await this.model.deleteMany({});
             }

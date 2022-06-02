@@ -1,5 +1,5 @@
 // Importo el modulo de la Clase ProductsDao
-const { ProductsDao } = require('../../daos/products/file/productsDao.js');
+const { ProductsDao } = require('../../daos/products/productsDao.js');
 
 const express = require('express');
 const { Router } = express;
@@ -26,6 +26,7 @@ productsRouter.get('/:id?', (req, res) => {
     };
 });
 
+// ----------------ESTOY TENIENDO PROBLEMAS CON EL REQ.BODY
 productsRouter.post('/', jsonParser, (req, res) => {
     if (administrator) {
         productsDao.save(req.body);

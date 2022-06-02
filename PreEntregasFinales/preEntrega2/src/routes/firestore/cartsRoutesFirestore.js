@@ -1,5 +1,5 @@
 // Importo el modulo de la Clase CartsContainerFirestore
-const { CartsDaoFirestore } = require('../../daos/cart/firestore/cartsDaoFirestore.js');
+const { CartsDaoFirestore } = require('../../daos/cart/cartsDaoFirestore.js');
 
 const express = require('express');
 const { Router } = express;
@@ -11,32 +11,35 @@ const jsonParser = bodyParser.json();
 let cartsDaoFirestore = new CartsDaoFirestore();
 
 // Rutas
-// cartsRouter.post('/', jsonParser, async(req, res) => {
-//     await cartsDaoFirestore.save(req.body);
-//     let carts = await cartsDaoFirestore.getAll();
-//     let cartId = carts[carts.length - 1]._id;
-//     console.log(cartId);
-//     res.send(`The ID of your Cart is ${cartId}`);
-// });
 
-// cartsRouter.delete('/:id', (req, res) => {
-//     let id = parseInt(req.params.id);
-//     cartsDaoFirestore.deleteById(id)
-//     res.send('Your Cart has been deleted');
-// });
+// ----------------ESTOY TENIENDO PROBLEMAS CON EL REQ.BODY
+cartsRouter.post('/', jsonParser, async(req, res) => {
+    await cartsDaoFirestore.save(req.body);
+    let carts = await cartsDaoFirestore.getContentDB();
+    let docs = carts.docs;
+    let lastId = docs[docs.length - 1].id;
+    console.log(lastId);
+    res.send(`The ID of your Cart is ${lastId}`);
+});
 
-// cartsRouter.get('/:id/products', async(req, res) => {
-//     let id = parseInt(req.params.id);
-//     let cartProducts = await cartsDaoFirestore.getProductByIdCart(id);
-//     if (cartProducts) {
-//         res.json(cartProducts);
-//     } else {
-//         res.send('Cart not found');
-//     }
-// });
+cartsRouter.delete('/:id', (req, res) => {
+    let id = req.params.id;
+    cartsDaoFirestore.deleteById(id)
+    res.send('Your Cart has been deleted');
+});
+
+cartsRouter.get('/:id/products', async(req, res) => {
+    let id = req.params.id;
+    let cartProducts = await cartsDaoFirestore.getProductByIdCart(id);
+    if (cartProducts) {
+        res.json(cartProducts);
+    } else {
+        res.send('Products not found');
+    }
+});
 
 // necesito ver como agregar un product a un carrito determinado
-// cartsRouter.post('/:id/products', jsonParser, (req, res) => {
+// cartsRouter.post('/:id/products', (req, res) => {
 //     let id = parseInt(req.params.id);
 //     let product = req.body;
 //     let cart = cartsDaoFirestore.addProductsToCart(id, product);

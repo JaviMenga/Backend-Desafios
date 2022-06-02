@@ -1,5 +1,5 @@
 // Importo el modulo de la Clase CartsContainerDB
-const { CartsDaoDB } = require('../../daos/cart/mongodb/cartsDaoDB.js');
+const { CartsDaoDB } = require('../../daos/cart/cartsDaoDB.js');
 
 const express = require('express');
 const { Router } = express;
@@ -11,11 +11,11 @@ const jsonParser = bodyParser.json();
 let cartsDaoDB = new CartsDaoDB();
 
 // Rutas
+// ----------------ESTOY TENIENDO PROBLEMAS CON EL REQ.BODY
 cartsRouter.post('/', jsonParser, async(req, res) => {
     await cartsDaoDB.save(req.body);
     let carts = await cartsDaoDB.getAll();
     let cartId = carts[carts.length - 1]._id;
-    console.log(cartId);
     res.send(`The ID of your Cart is ${cartId}`);
 });
 
@@ -31,7 +31,7 @@ cartsRouter.get('/:id/products', async(req, res) => {
     if (cartProducts) {
         res.json(cartProducts);
     } else {
-        res.send('Cart not found');
+        res.send('Products not found');
     }
 });
 
