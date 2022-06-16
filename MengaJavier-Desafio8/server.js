@@ -1,5 +1,5 @@
 // KNEX
-const { knexMySql } = require('./options/mariaDB'); // KNEX
+const { knexMySql } = require('./options/mariaDB');
 const { knexSQLite3 } = require('./options/SQLite3');
 
 // FS
@@ -20,7 +20,6 @@ const io = new IOServer(httpServer);
 
 // CODIGO PARA ACCEDER A LOS DATOS DEL BODY RECIBIDOS POR PARTE DEL CLIENTE
 const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json()
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -30,6 +29,7 @@ app.set('view engine', 'ejs');
 
 // ESTABLEZCO EL DIRECTORIO DONDE SE ENCUENTRAN LOS ARCHIVOS DE LAS PLANTILLAS
 app.set('views', './views');
+
 // ESTABLEZCO EL DIRECTORIO DONDE SE ENCUENTRAN LOS ARCHIVOS DE CSS/JS
 app.use(express.static('public'));
 
@@ -91,8 +91,8 @@ class ProductsDB {
             .then((result) => {
                 return result;
             })
-            .catch(() => {
-                console.log('error en dropTableIfExists')
+            .catch((err) => {
+                console.log('tenemos un problema HOUSTON');
             });
         if (!table) {
             return [];
@@ -116,6 +116,7 @@ class MessagesDB {
         this.knex = knex;
         this.table = table;
     }
+
     async save(object) {
         let table = await this.knex.schema.hasTable(this.table)
             .then((result) => {
@@ -189,7 +190,9 @@ const ProductsServerClient = new ProductsDB(knexSQLite3, 'productsServerClient')
 // RUTAS
 
 app.get('/products', (req, res) => {
+
     res.render('pages/form', { root: __dirname });
+
 });
 
 io.on('connection', async socket => {
@@ -215,13 +218,17 @@ io.on('connection', async socket => {
 });
 
 app.post('/products', async(req, res) => {
+
     let newProduct = req.body
     newProduct.price = parseInt(newProduct.price)
     await Products.save(newProduct)
     res.render('pages/form')
+
 });
 
 app.get('/allProducts', async(req, res) => {
+    console.log('entre');
     let allProducts = await Products.getAll();
     res.render('pages/products', { products: allProducts });
+
 });
