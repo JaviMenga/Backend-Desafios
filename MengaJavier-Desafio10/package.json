@@ -1,0 +1,22 @@
+{
+    "name": "mengajavier-desafio6",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node server.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "ejs": "^3.1.7",
+        "express": "^4.18.1",
+        "faker": "^5.5.3",
+        "knex": "^2.0.0",
+        "mongoose": "^6.3.8",
+        "mysql": "^2.18.1",
+        "socket.io": "^4.5.0",
+        "sqlite3": "^5.0.8"
+    }
+}
