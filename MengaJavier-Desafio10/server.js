@@ -40,21 +40,7 @@ httpServer.listen(PORT, () => {
 });
 httpServer.on('error', err => { console.log(err) });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// TENGO MI CLASES CON SUS RESPECTIVOS METODOS
+// TENGO MI CLASE CON SUS RESPECTIVOS METODOS
 class ProductsDB {
 
     constructor(knex, table) {
@@ -162,118 +148,36 @@ class ProductsDB {
     }
 
 };
-class MessagesDB {
-
-    constructor(knex, table) {
-
-        this.knex = knex;
-        this.table = table;
-
-    }
-
-    async save(object) {
-
-        let table = await this.knex.schema.hasTable(this.table)
-            .then((result) => {
-
-                return result;
-
-            })
-            .catch(() => {
-
-                console.log('error en dropTableIfExists')
-
-            });
-        if (!table) {
-
-            return this.knex.schema.createTable(this.table, (table) => {
-
-                    table.string('email');
-                    table.string('date');
-                    table.string('message');
-
-                })
-                .then(() => {
-
-                    return this.knex(this.table).insert(object)
-                        .then((result) => {
-
-                            return result;
-
-                        })
-                        .catch((err) => {
-
-                            console.log('error en insert1');
-
-                        })
-                })
-                .catch((err) => {
-
-                    console.log('error en create');
-
-                })
-        } else {
-
-            return this.knex(this.table).insert(object)
-                .then((result) => {
-
-                    return result;
-
-                })
-                .catch((err) => {
-
-                    console.log('error en insert2');
-
-                })
-
-        }
-
-    }
-
-    async getAll() {
-
-        let table = await this.knex.schema.hasTable(this.table)
-            .then((result) => {
-
-                return result;
-
-            })
-            .catch(() => {
-                console.log('error en dropTableIfExists')
-
-            });
-        if (!table) {
-
-            return [];
-
-        } else {
-
-            return this.knex(this.table).select('*')
-                .then((result) => {
-
-                    return result;
-
-                })
-                .catch((err) => {
-
-                    console.log('error en getAll');
-
-                })
-
-        }
-
-    }
-
-};
 
 // DEFINO MIS CLASES
 const Products = new ProductsDB(knexMySql, 'products');
 const Messages = new MessagesDaoMongo();
 const ProductsServerClient = new ProductsDB(knexSQLite3, 'productsServerClient');
 
+// NORMALIZR
+const { schema, normalize, denormalize } = require('normalizr');
+const util = require('util');
+
+function print(obj) {
+    console.log(util.inspect(obj, false, 12, true));
+    console.log(JSON.stringify(obj).length);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // RUTAS
 app.get('/products', (req, res) => {
-
     res.render('pages/form', { root: __dirname });
 
 });
@@ -289,6 +193,25 @@ io.on('connection', async socket => {
         io.sockets.emit('products', allProducts)
 
     });
+
+    // NORMALIZAR
+    let messages = await Messages.getAll()
+    console.log(messages);
+
+    const authorSchema = new schema.Entity('author', { idAttribute: 'email' });
+    const messageSchema = new schema.Entity('text', {
+        id: 'messages',
+        author: authorSchema
+    });
+    // const messagesSchema = new schema.Entity('messages', {
+    //     author: authorSchema
+    // })
+
+    const messagesNormalized = normalize(messages, messageSchema);
+    print(messagesNormalized);
+
+
+
 
     socket.emit('messages', await Messages.getAll());
 
