@@ -23,10 +23,10 @@ function addMessage(e) {
             lastname: document.getElementById('lastname').value,
             alias: document.getElementById('alias').value,
             age: document.getElementById('age').value,
-            avatar: document.getElementById('avatar').value,
-            date: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+            avatar: document.getElementById('avatar').value
         },
-        text: document.getElementById('message').value
+        text: document.getElementById('message').value,
+        date: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
     }
     socket.emit('newMessage', newMessage)
     return false
@@ -48,6 +48,6 @@ socket.on('products', data => {
 socket.on('messages', data => {
     messagesCenter.innerHTML = ''
     data.forEach(message => {
-        messagesCenter.innerHTML += `<p><span class="fw-bold blue">${message.author.email} </span><span class="brown">[${message.author.date}] </span>: <span class="fst-italic green">${message.text}</span>  <span"><image src=${message.author.avatar} class="avatar"></span></p>`
+        messagesCenter.innerHTML += `<p><span class="fw-bold blue">${message.author.email} </span><span class="brown">[${message.date}] </span>: <span class="fst-italic green">${message.text}</span>  <span"><image src=${message.author.avatar} class="avatar"></span></p>`
     })
 })

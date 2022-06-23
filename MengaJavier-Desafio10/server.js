@@ -195,25 +195,24 @@ io.on('connection', async socket => {
     });
 
     // NORMALIZAR
-    let messages = await Messages.getAll()
+    // no estoy pudiendo lograr que normalice
+    let messages = { id: 'messages', messages: await Messages.getAll() }
     console.log(messages);
 
-    const authorSchema = new schema.Entity('author', { idAttribute: 'email' });
-    const messageSchema = new schema.Entity('text', {
-        id: 'messages',
+    const authorSchema = new schema.Entity('authors', {}, {
+        idAttribute: 'email'
+    });
+    const messageSchema = new schema.Entity('messages', {
         author: authorSchema
     });
-    // const messagesSchema = new schema.Entity('messages', {
-    //     author: authorSchema
-    // })
+    const allMessagesSchema = new schema.Entity('allMessages', {
+        messages: [messageSchema]
+    })
 
-    const messagesNormalized = normalize(messages, messageSchema);
-    print(messagesNormalized);
+    const normalizeMessage = normalize(messages, allMessagesSchema)
+    print(normalizeMessage)
 
-
-
-
-    socket.emit('messages', await Messages.getAll());
+    socket.emit('messages', messages);
 
     socket.on('newMessage', async data => {
 
