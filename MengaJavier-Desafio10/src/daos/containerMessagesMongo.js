@@ -19,7 +19,7 @@ class MessagesDaoMongo extends ContainerMongo {
         try {
             await this.saveInDb(newMessage);
         } catch (err) {
-            console.log('error en save');
+            console.log('error en save' + err);
         }
     };
 

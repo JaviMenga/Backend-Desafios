@@ -1,5 +1,4 @@
 const socket = io();
-
 let divAllProducts = document.getElementById('divAllProducts');
 let messagesCenter = document.getElementById('messagesCenter');
 let productsTest = document.getElementById('products-test');
@@ -32,7 +31,6 @@ function addMessage(e) {
     return false
 };
 
-
 socket.on('products', data => {
     divAllProducts.innerHTML = ''
 
@@ -46,8 +44,10 @@ socket.on('products', data => {
 });
 
 socket.on('messages', data => {
+
     messagesCenter.innerHTML = ''
     data.forEach(message => {
         messagesCenter.innerHTML += `<p><span class="fw-bold blue">${message.author.email} </span><span class="brown">[${message.date}] </span>: <span class="fst-italic green">${message.text}</span>  <span"><image src=${message.author.avatar} class="avatar"></span></p>`
     })
+
 })

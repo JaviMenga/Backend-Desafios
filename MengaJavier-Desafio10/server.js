@@ -155,7 +155,7 @@ const Messages = new MessagesDaoMongo();
 const ProductsServerClient = new ProductsDB(knexSQLite3, 'productsServerClient');
 
 // NORMALIZR
-const { schema, normalize, denormalize } = require('normalizr');
+const { schema, normalize } = require('normalizr');
 const util = require('util');
 
 function print(obj) {
@@ -195,24 +195,22 @@ io.on('connection', async socket => {
     });
 
     // NORMALIZAR
-    // no estoy pudiendo lograr que normalice
+    // no estoy pudiendo lograr que normalice el author
     let messages = { id: 'messages', messages: await Messages.getAll() }
-    console.log(messages);
-
     const authorSchema = new schema.Entity('authors', {}, {
         idAttribute: 'email'
     });
-    const messageSchema = new schema.Entity('messages', {
+    const post = new schema.Entity('post', {
         author: authorSchema
     });
-    const allMessagesSchema = new schema.Entity('allMessages', {
-        messages: [messageSchema]
+    const posts = new schema.Entity('posts', {
+        messages: [post]
     })
 
-    const normalizeMessage = normalize(messages, allMessagesSchema)
-    print(normalizeMessage)
+    const normalizedMessage = normalize(messages, posts)
+    print(normalizedMessage)
 
-    socket.emit('messages', messages);
+    socket.emit('messages', normalizedMessage);
 
     socket.on('newMessage', async data => {
 
