@@ -44,7 +44,7 @@ socket.on('products', data => {
 });
 
 socket.on('messages', data => {
-
+    // logica para desnormalizar el objeto recibido del backend
     messagesCenter.innerHTML = ''
     data.forEach(message => {
         messagesCenter.innerHTML += `<p><span class="fw-bold blue">${message.author.email} </span><span class="brown">[${message.date}] </span>: <span class="fst-italic green">${message.text}</span>  <span"><image src=${message.author.avatar} class="avatar"></span></p>`
