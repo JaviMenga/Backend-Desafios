@@ -1,8 +1,11 @@
 const socket = io();
+
 let divAllProducts = document.getElementById('divAllProducts');
 let messagesCenter = document.getElementById('messagesCenter');
 let loginDiv = document.getElementById('loginDiv');
+let username = document.getElementById('username');
 
+// funciona bien
 function addProduct(e) {
     let newProduct = {
         title: document.getElementById('title').value,
@@ -13,6 +16,7 @@ function addProduct(e) {
     return false
 };
 
+// funciona bien
 function addMessage(e) {
     let date = new Date();
     let newMessage = {
@@ -31,9 +35,21 @@ function addMessage(e) {
     return false
 };
 
-socket.on('products', data => {
-    divAllProducts.innerHTML = ''
+function loginForm(user) {
+    loginDiv.innerHTML = '';
+    loginDiv.innerHTML += `<h1 class="w-100" id="messageToUser">Bienvenido ${user}</h1><form action="/logout" method="get" class="p-1" onSubmit="return logout(this)"><button type="submit" class="btn btn-danger flex-shrink-1 border">Logout</button></form>`;
 
+}
+
+function logout(e) {
+    let messageToUser = document.getElementById('messageToUser');
+    messageToUser.innerHTML = '';
+    messageToUser.innerHTML += '<h1 class="w-100">Hasta luego </h1>'
+    return true;
+};
+
+socket.on('products', data => {
+    divAllProducts.innerHTML = '';
     data.forEach(product => {
         divAllProducts.innerHTML += `<tr>
                                         <th scope="row">${product.title}</th>
@@ -50,4 +66,12 @@ socket.on('messages', data => {
         messagesCenter.innerHTML += `<p><span class="fw-bold blue">${message.author.email} </span><span class="brown">[${message.date}] </span>: <span class="fst-italic green">${message.text}</span>  <span"><image src=${message.author.avatar} class="avatar"></span></p>`
     })
 
+});
+
+socket.on('login', data => {
+    let user;
+    for (let i = 0; i < data.length; i++) {
+        user = JSON.parse(data[i].session).user
+        loginForm(user)
+    }
 });
