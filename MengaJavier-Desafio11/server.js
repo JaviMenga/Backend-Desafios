@@ -150,7 +150,7 @@ app.get('/products', checkLogged, (req, res) => {
 });
 
 // funciona bien
-app.get('/allProducts', async(req, res) => {
+app.get('/allProducts', checkLogged, async(req, res) => {
     let allProducts = await Products.getAll();
     res.render('pages/products', { products: allProducts });
 });
@@ -176,5 +176,5 @@ app.post('/products', checkLogged, async(req, res) => {
 // Aquí entro cuando presiono el botón "logout" y lo que hace es destruir la sessión y renderizar nuevamente al inicio del login
 app.get('/logout', (req, res) => {
     req.session.destroy();
-    setTimeout(() => { res.render('pages/form', { root: __dirname }) }, 2000)
+    setTimeout(() => { res.render('pages/home', { root: __dirname }) }, 2000)
 });

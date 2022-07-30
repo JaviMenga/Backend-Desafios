@@ -1,0 +1,41 @@
+<div class="border border-dark bg-secondary bg-gradient d-flex flex-row">
+
+    <% if(isUser) { %>
+        <h1 class="w-100" id="messageToUser">Bienvenido
+            <%=user.username%>
+        </h1>
+        <form action="/logout" method="get" class="p-1" onSubmit="return logout(this)"><button type="submit" class="btn btn-danger flex-shrink-1 border">Logout</button></form>
+        <% } else { %>
+
+            <div>
+                <h3 class="text-center">Log In</h3>
+                <form action="/login" method="post" class="p-1">
+                    <div class="mb-3">
+                        <label for="username " class="form-label ms-2 fw-bold ">Username</label>
+                        <input type="text " class="form-control" id="username" name="username" placeholder="Ej. Jperez ">
+                        <label for="password " class="form-label ms-2 fw-bold ">Password</label>
+                        <input type="password " class="form-control" id="username" name="password" placeholder="jp1234">
+                    </div>
+                    <button type="submit" class="btn btn-success">Login</button>
+                </form>
+            </div>
+
+            <div>
+                <h3 class="text-center">Sign Up</h3>
+                <form action="/signUp" method="post" class="p-1">
+                    <div class="mb-3">
+                        <label for="username " class="form-label ms-2 fw-bold ">Username</label>
+                        <input type="text " class="form-control" id="username" name="username" placeholder="Ej. Jperez ">
+
+                        <label for="password " class="form-label ms-2 fw-bold ">Password</label>
+                        <input type="password " class="form-control" id="password" name="password" placeholder="Ej. jp1234 ">
+
+                        <label for="address" class="form-label ms-2 fw-bold ">Address </label>
+                        <input type="text " class="form-control" id="addres" name="address" placeholder="Street 123 ">
+                    </div>
+                    <button type="submit" class="btn btn-success">Sign Up</button>
+                </form>
+            </div>
+            <% } %>
+
+</div>
